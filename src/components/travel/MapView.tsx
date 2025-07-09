@@ -1,7 +1,12 @@
 import { useRef, useState, useEffect } from 'react';
-// Import individual components from react-map-gl
+// Import individual components directly from their modules
+import Map from 'react-map-gl/dist/esm/components/map';
+import Marker from 'react-map-gl/dist/esm/components/marker';
+import Popup from 'react-map-gl/dist/esm/components/popup';
+import NavigationControl from 'react-map-gl/dist/esm/components/navigation-control';
+import Source from 'react-map-gl/dist/esm/components/source';
+import Layer from 'react-map-gl/dist/esm/components/layer';
 import { MapRef } from 'react-map-gl';
-import * as ReactMapGL from 'react-map-gl';
 import type { LineLayer } from 'mapbox-gl';
 import * as mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -89,7 +94,7 @@ export const MapView = ({
 
   return (
     <div className="map-container h-full w-full relative rounded-lg overflow-hidden border border-border">
-      <ReactMapGL.Map
+      <Map
         ref={mapRef}
         initialViewState={{
           longitude: -74.006,
@@ -99,16 +104,16 @@ export const MapView = ({
         mapStyle="mapbox://styles/mapbox/streets-v12"
         mapboxAccessToken={MAPBOX_TOKEN}
       >
-        <ReactMapGL.NavigationControl position="top-right" />
+        <NavigationControl position="top-right" />
 
         {travelPath && (
-          <ReactMapGL.Source id="route" type="geojson" data={travelPath}>
-            <ReactMapGL.Layer {...routeLayer} />
-          </ReactMapGL.Source>
+          <Source id="route" type="geojson" data={travelPath}>
+            <Layer {...routeLayer} />
+          </Source>
         )}
 
         {locations.map((location) => (
-          <ReactMapGL.Marker 
+          <Marker 
             key={location.id}
             longitude={location.coordinates[0]} 
             latitude={location.coordinates[1]}
@@ -128,11 +133,11 @@ export const MapView = ({
                 className={selectedLocationId === location.id ? "text-accent" : "text-primary"}
               />
             </div>
-          </ReactMapGL.Marker>
+          </Marker>
         ))}
 
         {popupInfo && (
-          <ReactMapGL.Popup
+          <Popup
             anchor="top"
             longitude={popupInfo.coordinates[0]}
             latitude={popupInfo.coordinates[1]}
@@ -164,9 +169,9 @@ export const MapView = ({
                 </Button>
               </div>
             </div>
-          </ReactMapGL.Popup>
+          </Popup>
         )}
-      </ReactMapGL.Map>
+      </Map>
     </div>
   );
 };
