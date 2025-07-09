@@ -46,10 +46,19 @@ function App() {
   const [savedItinerary, setSavedItinerary] = useKV<Itinerary | null>("current-itinerary", null);
   
   // UI state with useState
-  const [locations, setLocations] = useState<Location[]>([]);
-  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
+  const [locations, setLocations] = useState<Location[]>([
+    {
+      id: 'times-square',
+      name: 'Times Square',
+      address: 'Manhattan, NY 10036',
+      coordinates: [-73.9855, 40.7580],
+      imageUrl: 'https://images.unsplash.com/photo-1569854985259-ddbb3c0c7671?ixlib=rb-4.0.3&auto=format&fit=crop&w=1050&q=80',
+      description: 'Bustling destination in the heart of NYC known for bright lights, Broadway theaters & commercial billboards.'
+    }
+  ]);
+  const [selectedLocationId, setSelectedLocationId] = useState<string | null>('times-square');
   const [travelModes, setTravelModes] = useState<Record<string, string>>({});
-  const [activeTab, setActiveTab] = useState('search');
+  const [activeTab, setActiveTab] = useState('suggestions');
   const [isMapVisible, setIsMapVisible] = useState(true);
 
   // Load saved itinerary on mount
@@ -168,7 +177,7 @@ function App() {
         <div className="flex-1 md:w-1/2 md:flex-none overflow-auto">
           <div className="container mx-auto p-4 max-w-2xl">
             <Tabs 
-              defaultValue="search" 
+              defaultValue="suggestions" 
               value={activeTab} 
               onValueChange={setActiveTab}
               className="space-y-4"

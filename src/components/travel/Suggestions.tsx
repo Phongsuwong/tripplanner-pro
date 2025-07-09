@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
@@ -98,10 +98,22 @@ const MOCK_SUGGESTIONS: Record<string, Suggestion[]> = {
 
 export const Suggestions = ({ currentLocation, onAddLocation }: SuggestionsProps) => {
   const [activeTab, setActiveTab] = useState<SuggestionType>('attraction');
+  const [isLoading, setIsLoading] = useState(false);
   
   // Get suggestions based on the current location
   const suggestions = currentLocation ? MOCK_SUGGESTIONS[currentLocation.id] || [] : [];
   const filteredSuggestions = suggestions.filter(suggestion => suggestion.type === activeTab);
+  
+  // Simulate loading effect when the location or tab changes
+  useEffect(() => {
+    if (currentLocation) {
+      setIsLoading(true);
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [currentLocation, activeTab]);
   
   // Convert suggestion to a location object
   const handleAddSuggestion = (suggestion: Suggestion) => {
@@ -119,7 +131,7 @@ export const Suggestions = ({ currentLocation, onAddLocation }: SuggestionsProps
   if (!currentLocation) {
     return (
       <Card className="p-4">
-        <p className="text-center text-muted-foreground">Select a location to see nearby suggestions.</p>
+        <p className="text-center text-muted-foreground">Please select a location to see nearby suggestions.</p>
       </Card>
     );
   }
@@ -127,7 +139,10 @@ export const Suggestions = ({ currentLocation, onAddLocation }: SuggestionsProps
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Nearby Places</h2>
-      <p className="text-muted-foreground">Suggestions near {currentLocation.name}</p>
+      <p className="text-muted-foreground">
+        Showing suggestions near <strong>{currentLocation.name}</strong>
+        <span className="text-sm ml-2">(tap suggestions to add to your itinerary)</span>
+      </p>
       
       <Tabs defaultValue="attraction" value={activeTab} onValueChange={(v) => setActiveTab(v as SuggestionType)}>
         <TabsList className="grid grid-cols-4">
@@ -150,7 +165,11 @@ export const Suggestions = ({ currentLocation, onAddLocation }: SuggestionsProps
         </TabsList>
         
         <TabsContent value={activeTab} className="mt-4">
-          {filteredSuggestions.length > 0 ? (
+          {isLoading ? (
+            <Card className="p-6 text-center">
+              <p className="text-muted-foreground">Loading suggestions...</p>
+            </Card>
+          ) : filteredSuggestions.length > 0 ? (
             <div className="space-y-3">
               {filteredSuggestions.map((suggestion) => (
                 <Card key={suggestion.id} className="p-3">
