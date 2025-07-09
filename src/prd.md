@@ -40,9 +40,9 @@
    - Success: Users can build a complete trip itinerary with multiple stops
    
 5. **Travel Mode Selection**
-   - What: Options to choose between driving, walking, public transit, or flying
-   - Why: Different travel preferences and abilities, especially for seniors
-   - Success: Travel times and routes update appropriately based on selected mode
+   - What: Enhanced options to choose between driving, walking, public transit, or flying, with detailed information about each mode
+   - Why: Different travel preferences and abilities, especially for seniors who need to understand tradeoffs between options
+   - Success: Travel times and routes update appropriately based on selected mode; users receive helpful information about advantages and limitations of each mode
    
 6. **Nearby Suggestions**
    - What: Recommend additional points of interest near selected locations

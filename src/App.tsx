@@ -9,7 +9,7 @@ import Suggestions from './components/travel/Suggestions';
 import Header from './components/travel/Header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 
-// Sample travel modes
+// Sample travel modes with more realistic times/speeds
 const TRAVEL_MODES: TravelMode[] = [
   {
     id: 'driving',
@@ -113,7 +113,7 @@ function App() {
   };
 
   // Handle saving the current itinerary
-  const handleSaveItinerary = () => {
+  const handleSaveItinerary = async () => {
     if (locations.length === 0) {
       toast.error("Cannot save empty itinerary");
       return;
@@ -122,16 +122,27 @@ function App() {
     // Create travel legs from the current state
     const travelLegs: TravelLeg[] = [];
     for (let i = 0; i < locations.length - 1; i++) {
-      const startId = locations[i].id;
-      const endId = locations[i + 1].id;
+      const startLocation = locations[i];
+      const endLocation = locations[i + 1];
+      const startId = startLocation.id;
+      const endId = endLocation.id;
       const modeId = travelModes[`${startId}-${endId}`] || TRAVEL_MODES[0].id;
+      
+      // Calculate travel time and distance using our utility functions
+      const [startLon, startLat] = startLocation.coordinates;
+      const [endLon, endLat] = endLocation.coordinates;
+      
+      // Import these functions from utils.ts
+      const { calculateTravelTime, calculateDistance } = await import('./lib/utils');
+      const distance = calculateDistance(startLat, startLon, endLat, endLon);
+      const duration = calculateTravelTime(startLocation, endLocation, modeId);
       
       travelLegs.push({
         startLocationId: startId,
         endLocationId: endId,
         travelMode: modeId,
-        duration: 30, // Placeholder values in a real app
-        distance: 5   // would be calculated from API
+        duration, 
+        distance
       });
     }
     
