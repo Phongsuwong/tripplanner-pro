@@ -1,0 +1,134 @@
+import { useState } from 'react';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { Card } from '../ui/card';
+import { MagnifyingGlass, Plus } from '@phosphor-icons/react';
+import { Location } from '../../types';
+
+interface LocationSearchProps {
+  onAddLocation: (location: Location) => void;
+}
+
+// Mock search results - in a real app this would come from an API
+const MOCK_SEARCH_RESULTS: Location[] = [
+  {
+    id: 'times-square',
+    name: 'Times Square',
+    address: 'Manhattan, NY 10036',
+    coordinates: [-73.9855, 40.7580],
+    imageUrl: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+    description: 'Bustling destination in the heart of NYC known for bright lights, Broadway theaters & commercial billboards.'
+  },
+  {
+    id: 'central-park',
+    name: 'Central Park',
+    address: 'New York, NY',
+    coordinates: [-73.9665, 40.7812],
+    imageUrl: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+    description: 'Urban park spanning 843 acres with paths, lakes & attractions like Bethesda Fountain & Strawberry Fields.'
+  },
+  {
+    id: 'empire-state',
+    name: 'Empire State Building',
+    address: '20 W 34th St, New York, NY 10001',
+    coordinates: [-73.9857, 40.7484],
+    imageUrl: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+    description: 'Iconic 102-story skyscraper completed in 1931 with observation decks, shops & city views.'
+  }
+];
+
+export const LocationSearch = ({ onAddLocation }: LocationSearchProps) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<Location[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    
+    setIsSearching(true);
+    
+    // Simulate API call with setTimeout
+    setTimeout(() => {
+      // In a real app, this would be an API call to Google Places or similar
+      const filteredResults = MOCK_SEARCH_RESULTS.filter(
+        location => location.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                   location.address.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      
+      setSearchResults(filteredResults);
+      setIsSearching(false);
+    }, 500);
+  };
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold">Find Locations</h2>
+      
+      <form onSubmit={handleSearch} className="flex gap-2">
+        <Input
+          type="text"
+          placeholder="Search for places like 'Times Square' or 'Central Park'"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="flex-grow text-base"
+        />
+        <Button type="submit" disabled={isSearching}>
+          <MagnifyingGlass className="mr-2" size={20} />
+          <span>Search</span>
+        </Button>
+      </form>
+
+      {/* Search results */}
+      {searchResults.length > 0 && (
+        <div className="space-y-3 mt-4">
+          <h3 className="font-medium">Search Results</h3>
+          {searchResults.map((location) => (
+            <Card key={location.id} className="p-3">
+              <div className="flex justify-between">
+                <div>
+                  <h4 className="font-medium">{location.name}</h4>
+                  <p className="text-sm text-muted-foreground">{location.address}</p>
+                </div>
+                <Button 
+                  size="sm"
+                  onClick={() => onAddLocation(location)}
+                  title="Add to itinerary"
+                >
+                  <Plus size={16} />
+                  <span className="ml-1">Add</span>
+                </Button>
+              </div>
+              {location.imageUrl && (
+                <div className="mt-2 h-32 overflow-hidden rounded-md">
+                  <img 
+                    src={location.imageUrl} 
+                    alt={location.name} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+              {location.description && (
+                <p className="text-sm mt-2">{location.description}</p>
+              )}
+            </Card>
+          ))}
+        </div>
+      )}
+      
+      {isSearching && (
+        <div className="text-center py-4">
+          <p>Searching...</p>
+        </div>
+      )}
+      
+      {searchResults.length === 0 && searchQuery && !isSearching && (
+        <Card className="p-4">
+          <p className="text-center text-muted-foreground">No locations found. Try another search term.</p>
+        </Card>
+      )}
+    </div>
+  );
+};
+
+export default LocationSearch;
