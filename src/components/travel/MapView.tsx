@@ -1,5 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
-import Map, { Marker, Popup, NavigationControl, Source, Layer, LineLayer } from 'react-map-gl';
+import { Map, Marker, Popup, NavigationControl, Source, Layer } from 'react-map-gl';
+import type { LineLayer } from 'react-map-gl';
+import * as mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Location } from '../../types';
 import { Button } from '../ui/button';
