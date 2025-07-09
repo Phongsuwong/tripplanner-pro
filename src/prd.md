@@ -44,10 +44,10 @@
    - Why: Different travel preferences and abilities, especially for seniors who need to understand tradeoffs between options
    - Success: Travel times and routes update appropriately based on selected mode; users receive helpful information about advantages and limitations of each mode
    
-6. **Itinerary Map View**
-   - What: Consolidated map view showing complete travel route with timing and distance details between locations
-   - Why: Provides a clear visual overview of the entire journey with essential travel information
-   - Success: Users can easily visualize their complete journey and understand travel requirements between stops
+6. **Integrated Map View**
+   - What: Main map view showing complete travel route with timing and distance details between locations, fully integrated with the itinerary
+   - Why: Provides a clear visual overview of the entire journey with essential travel information at all times
+   - Success: Users can easily visualize their complete journey and understand travel requirements between stops without switching views
 
 7. **Nearby Suggestions**
    - What: Recommend additional points of interest near selected locations
@@ -98,7 +98,7 @@
 ### Visual Hierarchy & Layout
 - **Attention Direction**: Location cards as the central focus with supporting details
 - **White Space Philosophy**: Generous spacing to avoid crowding, especially important for older users
-- **Grid System**: Simple two-column layout (location view and itinerary panels) on desktop, stacked on mobile
+- **Grid System**: Simple two-column layout (location map and itinerary panel) on desktop, stacked on mobile
 - **Responsive Approach**: Focused on desktop first (likely primary usage by target demographic), but adaptable to tablet
 - **Content Density**: Low density with larger touch targets and text
 

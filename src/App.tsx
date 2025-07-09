@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react';
 import { useKV } from '@github/spark/hooks';
 import { Toaster, toast } from 'sonner';
 import { Location, TravelMode, Itinerary, TravelLeg } from './types';
-import { MapView } from './components/travel/MapView'; // Note the change to named import
+import { MapView } from './components/travel/MapView';
 import ItineraryList from './components/travel/ItineraryList';
-import ItineraryMapView from './components/travel/ItineraryMapView';
 import LocationSearch from './components/travel/LocationSearch';
 import Suggestions from './components/travel/Suggestions';
 import Header from './components/travel/Header';
@@ -59,7 +58,7 @@ function App() {
   ]);
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>('times-square');
   const [travelModes, setTravelModes] = useState<Record<string, string>>({});
-  const [activeTab, setActiveTab] = useState('suggestions');
+  const [activeTab, setActiveTab] = useState('itinerary');
   const [isMapVisible, setIsMapVisible] = useState(true);
 
   // Load saved itinerary on mount
@@ -180,6 +179,7 @@ function App() {
                 locations={locations}
                 selectedLocationId={selectedLocationId}
                 onSelectLocation={setSelectedLocationId}
+                selectedTravelModes={travelModes}
               />
             </div>
           </div>
@@ -189,15 +189,14 @@ function App() {
         <div className="flex-1 md:w-1/2 md:flex-none overflow-auto">
           <div className="container mx-auto p-4 max-w-2xl">
             <Tabs 
-              defaultValue="suggestions" 
+              defaultValue="itinerary" 
               value={activeTab} 
               onValueChange={setActiveTab}
               className="space-y-4"
             >
-              <TabsList className="grid grid-cols-4">
+              <TabsList className="grid grid-cols-3">
                 <TabsTrigger value="search">Search</TabsTrigger>
                 <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
-                <TabsTrigger value="map-view">Map View</TabsTrigger>
                 <TabsTrigger value="suggestions">Suggestions</TabsTrigger>
               </TabsList>
               
@@ -214,14 +213,6 @@ function App() {
                   selectedLocationId={selectedLocationId}
                   travelModes={TRAVEL_MODES}
                   onChangeTravelMode={handleChangeTravelMode}
-                  selectedTravelModes={travelModes}
-                />
-              </TabsContent>
-              
-              <TabsContent value="map-view" className="space-y-6">
-                <ItineraryMapView 
-                  locations={locations}
-                  travelModes={TRAVEL_MODES}
                   selectedTravelModes={travelModes}
                 />
               </TabsContent>
