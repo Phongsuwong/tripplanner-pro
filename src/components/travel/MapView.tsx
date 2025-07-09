@@ -1,14 +1,9 @@
-import { useRef, useState, useEffect } from 'react';
-import Map, { Marker, Popup, NavigationControl, Source, Layer, MapRef } from 'react-map-gl';
-import type { LineLayer } from 'mapbox-gl';
-import * as mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import { useState } from 'react';
 import { Location } from '../../types';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
-import { MapPin } from '@phosphor-icons/react';
-
-// Placeholder token for demo purposes - in a real app, you'd secure this
-const MAPBOX_TOKEN = 'pk.demo.placeholder';
+import { ScrollArea } from '../ui/scroll-area';
+import { MapPin, CarSimple, PersonSimpleWalk, Bus, Airplane } from '@phosphor-icons/react';
 
 interface MapViewProps {
   locations: Location[];
@@ -17,154 +12,104 @@ interface MapViewProps {
   travelPath?: GeoJSON.FeatureCollection;
 }
 
-// Create route line style
-const routeLayer: LineLayer = {
-  id: 'route',
-  type: 'line',
-  layout: {
-    'line-join': 'round',
-    'line-cap': 'round'
-  },
-  paint: {
-    'line-color': '#0077CC',
-    'line-width': 4,
-    'line-opacity': 0.8
-  }
-};
-
 export const MapView = ({
   locations,
   selectedLocationId,
-  onSelectLocation,
-  travelPath
+  onSelectLocation
 }: MapViewProps) => {
-  const [popupInfo, setPopupInfo] = useState<Location | null>(null);
-  const mapRef = useRef<MapRef>(null);
+  const selectedLocation = locations.find(loc => loc.id === selectedLocationId) || null;
 
-  // Calculate the viewport to fit all markers
-  useEffect(() => {
-    if (!mapRef.current || locations.length === 0) return;
-
-    if (locations.length === 1) {
-      mapRef.current.flyTo({
-        center: locations[0].coordinates,
-        zoom: 14
-      });
-      return;
+  // Get travel icon based on mode
+  const getTravelIcon = (mode: string) => {
+    switch (mode) {
+      case 'driving': return <CarSimple size={24} weight="regular" className="text-primary" />;
+      case 'walking': return <PersonSimpleWalk size={24} weight="regular" className="text-primary" />;
+      case 'transit': return <Bus size={24} weight="regular" className="text-primary" />;
+      case 'flying': return <Airplane size={24} weight="regular" className="text-primary" />;
+      default: return <CarSimple size={24} weight="regular" className="text-primary" />;
     }
+  };
 
-    // Calculate bounds to include all locations
-    try {
-      const bounds = new mapboxgl.LngLatBounds();
-      locations.forEach(location => {
-        bounds.extend(location.coordinates as [number, number]);
-      });
-
-      mapRef.current.fitBounds(bounds, {
-        padding: 100,
-        maxZoom: 15,
-        duration: 1000
-      });
-    } catch (e) {
-      console.error("Error fitting bounds:", e);
-    }
-  }, [locations]);
-
-  // Effect to handle selected location
-  useEffect(() => {
-    if (selectedLocationId && locations.length) {
-      const location = locations.find(loc => loc.id === selectedLocationId);
-      if (location) {
-        setPopupInfo(location);
-        mapRef.current?.flyTo({
-          center: location.coordinates,
-          zoom: 15,
-          duration: 1000
-        });
-      }
-    }
-  }, [selectedLocationId, locations]);
-
+  // Simplified Map View that doesn't require external libraries
   return (
-    <div className="map-container h-full w-full relative rounded-lg overflow-hidden border border-border">
-      <Map
-        ref={mapRef}
-        initialViewState={{
-          longitude: -74.006,
-          latitude: 40.7128,
-          zoom: 12
-        }}
-        mapStyle="mapbox://styles/mapbox/streets-v12"
-        mapboxAccessToken={MAPBOX_TOKEN}
-      >
-        <NavigationControl position="top-right" />
-
-        {travelPath && (
-          <Source id="route" type="geojson" data={travelPath}>
-            <Layer {...routeLayer} />
-          </Source>
-        )}
-
-        {locations.map((location) => (
-          <Marker 
-            key={location.id}
-            longitude={location.coordinates[0]} 
-            latitude={location.coordinates[1]}
-            anchor="bottom"
-            onClick={e => {
-              e.originalEvent.stopPropagation();
-              setPopupInfo(location);
-              onSelectLocation(location.id);
-            }}
+    <div className="map-container h-full w-full rounded-lg overflow-hidden border border-border bg-card flex flex-col">
+      <div className="bg-secondary/10 p-4 border-b border-border">
+        <h2 className="text-xl font-medium flex items-center gap-2">
+          <MapPin size={24} weight="fill" className="text-accent" />
+          {locations.length > 0 ? `Your Journey (${locations.length} locations)` : 'No locations added yet'}
+        </h2>
+      </div>
+      
+      {locations.length === 0 ? (
+        <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+          <MapPin size={64} weight="light" className="text-muted-foreground mb-4" />
+          <h3 className="text-xl font-medium mb-2">No locations added yet</h3>
+          <p className="text-muted-foreground mb-4">
+            Search for locations and add them to your itinerary to see them on the map.
+          </p>
+          <Button 
+            variant="outline"
+            onClick={() => onSelectLocation(null)}
           >
-            <div 
-              className={`transition-all duration-300 ${selectedLocationId === location.id ? 'scale-125' : 'scale-100'}`}
-            >
-              <MapPin 
-                size={36} 
-                weight={selectedLocationId === location.id ? "fill" : "regular"} 
-                className={selectedLocationId === location.id ? "text-accent" : "text-primary"}
-              />
-            </div>
-          </Marker>
-        ))}
-
-        {popupInfo && (
-          <Popup
-            anchor="top"
-            longitude={popupInfo.coordinates[0]}
-            latitude={popupInfo.coordinates[1]}
-            onClose={() => setPopupInfo(null)}
-            closeOnClick={false}
-            className="rounded-md"
-            maxWidth="300px"
-          >
-            <div className="p-2">
-              <h3 className="text-lg font-medium mb-1">{popupInfo.name}</h3>
-              <p className="text-sm text-muted-foreground mb-2">{popupInfo.address}</p>
-              {popupInfo.imageUrl && (
-                <img 
-                  src={popupInfo.imageUrl} 
-                  alt={popupInfo.name} 
-                  className="w-full h-32 object-cover rounded-md mb-2" 
-                />
-              )}
-              {popupInfo.description && (
-                <p className="text-sm mb-2">{popupInfo.description}</p>
-              )}
-              <div className="flex justify-end">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={() => setPopupInfo(null)}
-                >
-                  Close
-                </Button>
-              </div>
-            </div>
-          </Popup>
-        )}
-      </Map>
+            Search Locations
+          </Button>
+        </div>
+      ) : (
+        <ScrollArea className="flex-1">
+          <div className="p-4 space-y-4">
+            {locations.map((location, index) => (
+              <Card 
+                key={location.id} 
+                className={`cursor-pointer transition-all ${selectedLocationId === location.id ? 'border-primary ring-1 ring-primary' : 'hover:border-primary/50'}`}
+                onClick={() => onSelectLocation(location.id)}
+              >
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <div className="bg-primary/10 rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium text-primary">
+                      {index + 1}
+                    </div>
+                    {location.name}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground text-sm mb-2">{location.address}</p>
+                  
+                  {location.imageUrl && (
+                    <div className="rounded-md overflow-hidden mb-3">
+                      <img 
+                        src={location.imageUrl} 
+                        alt={location.name} 
+                        className="w-full h-32 object-cover" 
+                      />
+                    </div>
+                  )}
+                  
+                  {location.description && (
+                    <p className="text-sm mt-2">{location.description}</p>
+                  )}
+                  
+                  {index < locations.length - 1 && (
+                    <div className="mt-3 border-t border-border pt-2 flex items-center justify-center">
+                      {getTravelIcon('driving')}
+                      <div className="mx-2 text-sm text-muted-foreground">
+                        Travel to next location
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </ScrollArea>
+      )}
+      
+      {selectedLocation && (
+        <div className="p-3 border-t border-border bg-card">
+          <p className="text-sm text-center text-muted-foreground">
+            Selected: <span className="font-medium text-foreground">{selectedLocation.name}</span>
+          </p>
+        </div>
+      )}
     </div>
   );
 };

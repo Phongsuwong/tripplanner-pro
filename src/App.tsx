@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useKV } from '@github/spark/hooks';
 import { Toaster, toast } from 'sonner';
 import { Location, TravelMode, Itinerary, TravelLeg } from './types';
-import MapView from './components/travel/MapView';
+import { MapView } from './components/travel/MapView'; // Note the change to named import
 import ItineraryList from './components/travel/ItineraryList';
 import LocationSearch from './components/travel/LocationSearch';
 import Suggestions from './components/travel/Suggestions';
@@ -51,9 +51,6 @@ function App() {
   const [travelModes, setTravelModes] = useState<Record<string, string>>({});
   const [activeTab, setActiveTab] = useState('search');
   const [isMapVisible, setIsMapVisible] = useState(true);
-  
-  // GeoJSON for map routes
-  const [travelPath, setTravelPath] = useState<GeoJSON.FeatureCollection | undefined>(undefined);
 
   // Load saved itinerary on mount
   useEffect(() => {
@@ -66,47 +63,8 @@ function App() {
         modesMap[`${leg.startLocationId}-${leg.endLocationId}`] = leg.travelMode;
       });
       setTravelModes(modesMap);
-      
-      // Create GeoJSON paths
-      updateTravelPaths(savedItinerary.locations, modesMap);
     }
   }, [savedItinerary]);
-
-  // Update travel paths whenever locations or modes change
-  useEffect(() => {
-    updateTravelPaths(locations, travelModes);
-  }, [locations, travelModes]);
-
-  // Function to generate mock GeoJSON paths (in a real app this would use a directions API)
-  const updateTravelPaths = (locs: Location[], modes: Record<string, string>) => {
-    if (locs.length < 2) {
-      setTravelPath(undefined);
-      return;
-    }
-    
-    const features: GeoJSON.Feature[] = [];
-    
-    for (let i = 0; i < locs.length - 1; i++) {
-      const start = locs[i].coordinates;
-      const end = locs[i + 1].coordinates;
-      
-      // Simple direct line for demo purposes
-      // In a real app, would use the directions API to get actual route
-      features.push({
-        type: 'Feature',
-        properties: {},
-        geometry: {
-          type: 'LineString',
-          coordinates: [start, end]
-        }
-      });
-    }
-    
-    setTravelPath({
-      type: 'FeatureCollection',
-      features
-    });
-  };
 
   // Handle adding a location to the itinerary
   const handleAddLocation = (location: Location) => {
@@ -201,7 +159,6 @@ function App() {
                 locations={locations}
                 selectedLocationId={selectedLocationId}
                 onSelectLocation={setSelectedLocationId}
-                travelPath={travelPath}
               />
             </div>
           </div>

@@ -29,10 +29,10 @@
    - Why: Helps users confirm if the location fits their interests
    - Success: Users can view essential information about places before adding to itinerary
    
-3. **Interactive Map**
-   - What: Visual representation of the itinerary with location markers and routes
-   - Why: Provides spatial understanding of the planned journey
-   - Success: Map accurately displays all added locations with appropriate zoom level
+3. **Interactive Location Display**
+   - What: Visual representation of the itinerary with location cards and travel information
+   - Why: Provides clear understanding of the planned journey without requiring complex map libraries
+   - Success: Display accurately shows all added locations in sequence with travel information
 
 4. **Itinerary Builder**
    - What: List interface to add, remove, and reorder locations
@@ -91,9 +91,9 @@
 - **Legibility Check**: Nunito Sans is highly readable at larger sizes, has distinct letterforms, and renders well across devices
 
 ### Visual Hierarchy & Layout
-- **Attention Direction**: Map as the central focus with supporting panels
+- **Attention Direction**: Location cards as the central focus with supporting details
 - **White Space Philosophy**: Generous spacing to avoid crowding, especially important for older users
-- **Grid System**: Simple two-column layout (map and itinerary panels) on desktop, stacked on mobile
+- **Grid System**: Simple two-column layout (location view and itinerary panels) on desktop, stacked on mobile
 - **Responsive Approach**: Focused on desktop first (likely primary usage by target demographic), but adaptable to tablet
 - **Content Density**: Low density with larger touch targets and text
 

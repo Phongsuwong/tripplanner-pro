@@ -1,5 +1,5 @@
 import { Button } from '../ui/button';
-import { MapTrifold, Download, FloppyDisk } from '@phosphor-icons/react';
+import { MapTrifold, Download, FloppyDisk, Cards } from '@phosphor-icons/react';
 
 interface HeaderProps {
   onSaveItinerary: () => void;
@@ -22,8 +22,8 @@ export const Header = ({ onSaveItinerary, onToggleMapView, isMapVisible }: Heade
             className="md:hidden"
             onClick={onToggleMapView}
           >
-            <MapTrifold size={20} className="mr-2" />
-            {isMapVisible ? 'Hide Map' : 'Show Map'}
+            <Cards size={20} className="mr-2" />
+            {isMapVisible ? 'Hide Locations' : 'Show Locations'}
           </Button>
           
           <Button variant="secondary" onClick={onSaveItinerary}>
