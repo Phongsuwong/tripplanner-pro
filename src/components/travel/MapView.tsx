@@ -1,12 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-// Import individual components directly from their modules
-import Map from 'react-map-gl/dist/esm/components/map';
-import Marker from 'react-map-gl/dist/esm/components/marker';
-import Popup from 'react-map-gl/dist/esm/components/popup';
-import NavigationControl from 'react-map-gl/dist/esm/components/navigation-control';
-import Source from 'react-map-gl/dist/esm/components/source';
-import Layer from 'react-map-gl/dist/esm/components/layer';
-import { MapRef } from 'react-map-gl';
+import { Map, Marker, Popup, NavigationControl, Source, Layer, MapRef } from 'react-map-gl';
 import type { LineLayer } from 'mapbox-gl';
 import * as mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
