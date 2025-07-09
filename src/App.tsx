@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useKV } from '@github/spark/hooks';
 import { Toaster, toast } from 'sonner';
 import { Location, TravelMode, Itinerary, TravelLeg } from './types';
-import { MapView } from './components/travel/MapView';
+import { GoogleMapView } from './components/travel/GoogleMapView';
 import ItineraryList from './components/travel/ItineraryList';
 import LocationSearch from './components/travel/LocationSearch';
 import Suggestions from './components/travel/Suggestions';
@@ -175,11 +175,11 @@ function App() {
         {isMapVisible && (
           <div className="flex-1 md:w-1/2 md:flex-none h-64 md:h-auto">
             <div className="h-full p-4">
-              <MapView 
+              <GoogleMapView 
                 locations={locations}
                 selectedLocationId={selectedLocationId}
-                onSelectLocation={setSelectedLocationId}
                 selectedTravelModes={travelModes}
+                onSelectLocation={setSelectedLocationId}
               />
             </div>
           </div>
