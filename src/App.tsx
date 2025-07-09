@@ -4,6 +4,7 @@ import { Toaster, toast } from 'sonner';
 import { Location, TravelMode, Itinerary, TravelLeg } from './types';
 import { MapView } from './components/travel/MapView'; // Note the change to named import
 import ItineraryList from './components/travel/ItineraryList';
+import ItineraryMapView from './components/travel/ItineraryMapView';
 import LocationSearch from './components/travel/LocationSearch';
 import Suggestions from './components/travel/Suggestions';
 import Header from './components/travel/Header';
@@ -193,9 +194,10 @@ function App() {
               onValueChange={setActiveTab}
               className="space-y-4"
             >
-              <TabsList className="grid grid-cols-3">
+              <TabsList className="grid grid-cols-4">
                 <TabsTrigger value="search">Search</TabsTrigger>
                 <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
+                <TabsTrigger value="map-view">Map View</TabsTrigger>
                 <TabsTrigger value="suggestions">Suggestions</TabsTrigger>
               </TabsList>
               
@@ -212,6 +214,14 @@ function App() {
                   selectedLocationId={selectedLocationId}
                   travelModes={TRAVEL_MODES}
                   onChangeTravelMode={handleChangeTravelMode}
+                  selectedTravelModes={travelModes}
+                />
+              </TabsContent>
+              
+              <TabsContent value="map-view" className="space-y-6">
+                <ItineraryMapView 
+                  locations={locations}
+                  travelModes={TRAVEL_MODES}
                   selectedTravelModes={travelModes}
                 />
               </TabsContent>

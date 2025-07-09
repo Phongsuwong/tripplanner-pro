@@ -44,12 +44,17 @@
    - Why: Different travel preferences and abilities, especially for seniors who need to understand tradeoffs between options
    - Success: Travel times and routes update appropriately based on selected mode; users receive helpful information about advantages and limitations of each mode
    
-6. **Nearby Suggestions**
+6. **Itinerary Map View**
+   - What: Consolidated map view showing complete travel route with timing and distance details between locations
+   - Why: Provides a clear visual overview of the entire journey with essential travel information
+   - Success: Users can easily visualize their complete journey and understand travel requirements between stops
+
+7. **Nearby Suggestions**
    - What: Recommend additional points of interest near selected locations
    - Why: Enhances trip with relevant nearby attractions
    - Success: Suggestions are relevant and can be easily added to the itinerary
    
-7. **Save/Load Itineraries**
+8. **Save/Load Itineraries**
    - What: Ability to save plans and access them later
    - Why: Travel planning often happens over multiple sessions
    - Success: Saved itineraries are restored completely with all details intact
