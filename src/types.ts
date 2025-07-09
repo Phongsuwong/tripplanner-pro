@@ -6,6 +6,10 @@ export interface Location {
   description?: string;
   imageUrl?: string;
   placeId?: string;
+  // Additional properties that might come from Google Places API
+  rating?: number;
+  website?: string;
+  phoneNumber?: string;
 }
 
 export interface TravelMode {
