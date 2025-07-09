@@ -25,7 +25,7 @@ const MOCK_SUGGESTIONS: Record<string, Suggestion[]> = {
       type: 'restaurant',
       address: '1501 Broadway, New York, NY 10036',
       coordinates: [-73.9861, 40.7574],
-      imageUrl: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80',
       rating: 4.1,
       distance: 0.2
     },
@@ -35,7 +35,7 @@ const MOCK_SUGGESTIONS: Record<string, Suggestion[]> = {
       type: 'attraction',
       address: '234 W 42nd St, New York, NY 10036',
       coordinates: [-73.9880, 40.7564],
-      imageUrl: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      imageUrl: 'https://images.unsplash.com/photo-1550431241-a2b960657a5b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80',
       rating: 4.3,
       distance: 0.3
     },
@@ -45,7 +45,7 @@ const MOCK_SUGGESTIONS: Record<string, Suggestion[]> = {
       type: 'hotel',
       address: '1535 Broadway, New York, NY 10036',
       coordinates: [-73.9865, 40.7585],
-      imageUrl: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      imageUrl: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
       rating: 4.4,
       distance: 0.1
     },
@@ -57,7 +57,7 @@ const MOCK_SUGGESTIONS: Record<string, Suggestion[]> = {
       type: 'attraction',
       address: '1000 5th Ave, New York, NY 10028',
       coordinates: [-73.9632, 40.7794],
-      imageUrl: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      imageUrl: 'https://images.unsplash.com/photo-1565498546237-caee7c985004?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80',
       rating: 4.8,
       distance: 0.5
     },
@@ -67,7 +67,7 @@ const MOCK_SUGGESTIONS: Record<string, Suggestion[]> = {
       type: 'restaurant',
       address: 'Central Park, New York, NY 10024',
       coordinates: [-73.9667, 40.7812],
-      imageUrl: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
       rating: 4.0,
       distance: 0.1
     }
@@ -79,7 +79,7 @@ const MOCK_SUGGESTIONS: Record<string, Suggestion[]> = {
       type: 'attraction',
       address: 'W 32nd St, New York, NY 10001',
       coordinates: [-73.9874, 40.7484],
-      imageUrl: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      imageUrl: 'https://images.unsplash.com/photo-1566837497312-7be4912a0c54?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
       rating: 4.5,
       distance: 0.3
     },
@@ -89,7 +89,7 @@ const MOCK_SUGGESTIONS: Record<string, Suggestion[]> = {
       type: 'shopping',
       address: '151 W 34th St, New York, NY 10001',
       coordinates: [-73.9892, 40.7508],
-      imageUrl: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+      imageUrl: 'https://images.unsplash.com/photo-1481437156560-3205f6a55735?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80',
       rating: 4.3,
       distance: 0.4
     }
@@ -181,6 +181,11 @@ export const Suggestions = ({ currentLocation, onAddLocation }: SuggestionsProps
                         src={suggestion.imageUrl} 
                         alt={suggestion.name} 
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.onerror = null;
+                          target.src = 'https://images.unsplash.com/photo-1581373449483-37449f962b6c?auto=format&fit=crop&w=1050&q=80';
+                        }}
                       />
                     </div>
                   )}

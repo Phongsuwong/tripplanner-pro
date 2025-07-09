@@ -80,6 +80,11 @@ export const MapView = ({
                         src={location.imageUrl} 
                         alt={location.name} 
                         className="w-full h-32 object-cover" 
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.onerror = null;
+                          target.src = 'https://images.unsplash.com/photo-1581373449483-37449f962b6c?auto=format&fit=crop&w=1050&q=80';
+                        }}
                       />
                     </div>
                   )}
