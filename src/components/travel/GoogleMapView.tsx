@@ -24,22 +24,42 @@ export const GoogleMapView = ({
   useEffect(() => {
     const initMap = async () => {
       try {
-        await loadGoogleMapsScript();
-        
-        if (mapRef.current && !map) {
-          // Default center is Times Square
-          const defaultCenter = { lat: 40.7580, lng: -73.9855 };
+        // Don't need to load the script if it's already included in index.html
+        if (window.google?.maps) {
+          if (mapRef.current && !map) {
+            // Default center is Times Square
+            const defaultCenter = { lat: 40.7580, lng: -73.9855 };
+            
+            const newMap = new google.maps.Map(mapRef.current, {
+              zoom: 12,
+              center: defaultCenter,
+              mapTypeControl: false,
+              fullscreenControl: true,
+              streetViewControl: false,
+              zoomControl: true
+            });
+            
+            setMap(newMap);
+          }
+        } else {
+          // As a fallback, try to load the script dynamically
+          await loadGoogleMapsScript();
           
-          const newMap = new google.maps.Map(mapRef.current, {
-            zoom: 12,
-            center: defaultCenter,
-            mapTypeControl: false,
-            fullscreenControl: true,
-            streetViewControl: false,
-            zoomControl: true
-          });
-          
-          setMap(newMap);
+          if (mapRef.current && !map) {
+            // Default center is Times Square
+            const defaultCenter = { lat: 40.7580, lng: -73.9855 };
+            
+            const newMap = new google.maps.Map(mapRef.current, {
+              zoom: 12,
+              center: defaultCenter,
+              mapTypeControl: false,
+              fullscreenControl: true,
+              streetViewControl: false,
+              zoomControl: true
+            });
+            
+            setMap(newMap);
+          }
         }
       } catch (error) {
         console.error('Error initializing map:', error);
