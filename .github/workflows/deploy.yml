@@ -26,11 +26,15 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
         
       - name: Create .nojekyll file
         run: |
           touch dist/.nojekyll
-          cp public/_redirects dist/
+          if [ -f "public/_redirects" ]; then
+            cp public/_redirects dist/
+          fi
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4

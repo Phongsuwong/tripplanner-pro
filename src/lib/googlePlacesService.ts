@@ -1,6 +1,5 @@
 import { Location, Suggestion, SuggestionType } from '../types';
-
-const GOOGLE_MAPS_API_KEY = 'AIzaSyA3W7rlB4NBw5ZMwV-sGoE3p_TnQGOAItg';
+import { env } from './env-handler';
 
 // Helper function to load Google Maps script
 export const loadGoogleMapsScript = (): Promise<void> => {
@@ -10,8 +9,16 @@ export const loadGoogleMapsScript = (): Promise<void> => {
       return;
     }
     
+    // Use the API key from environment handler
+    const apiKey = env.googleMapsApiKey;
+    
+    if (!apiKey) {
+      reject(new Error('Google Maps API key is missing. Please check your environment variables.'));
+      return;
+    }
+    
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
     script.async = true;
     script.defer = true;
     script.onload = () => resolve();

@@ -37,32 +37,67 @@ This will:
 #### Automatic Deployment via GitHub Actions
 This repository is set up with a GitHub Actions workflow that automatically deploys the app when changes are pushed to the main branch:
 
-1. Push your changes to the main branch:
+1. Set up repository secrets:
+   - Go to your GitHub repository
+   - Navigate to Settings > Secrets and variables > Actions
+   - Click "New repository secret"
+   - Add `VITE_GOOGLE_MAPS_API_KEY` with your Google Maps API key value
+
+2. Push your changes to the main branch:
    ```
    git add .
    git commit -m "Your commit message"
    git push origin main
    ```
 
-2. The GitHub Actions workflow will automatically:
-   - Build the app
+3. The GitHub Actions workflow will automatically:
+   - Build the app (using the API key from repository secrets)
    - Deploy it to the gh-pages branch
    - Make it available at https://phongsuwong.github.io/tripplanner-pro/
 
-3. Check the Actions tab in your GitHub repository to monitor the deployment status.
+4. Check the Actions tab in your GitHub repository to monitor the deployment status.
 
 ### Development
 
 To run the application locally:
-```
-npm run dev
-```
+1. Set up environment variables:
+   ```
+   npm run setup-env
+   ```
+   Or manually create a `.env` file based on `.env.example`
+
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+3. Start the development server:
+   ```
+   npm run dev
+   ```
 
 ## Configuration
 
 - The app is configured to be served from the `/tripplanner-pro/` base path
 - The vite.config.ts file includes the necessary configuration for GitHub Pages deployment
-- The Google Maps API key is needed for location searches and mapping features
+- Environment variables are used for sensitive API keys
+
+### Environment Variables
+
+The application uses environment variables to securely manage API keys. Create a `.env` file in the root directory with the following variables:
+
+```
+VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
+```
+
+For production deployments:
+1. Add the environment variables to your GitHub repository secrets
+2. The GitHub Actions workflow will use these secrets during deployment
+3. For local development, use the `.env` file (which should not be committed to the repository)
+
+A `.env.example` file is included in the repository as a template.
+
+For detailed instructions on environment variables, see [Environment Variables Guide](./docs/environment-variables.md).
 
 ## License
 

@@ -8,6 +8,7 @@ import LocationSearch from './components/travel/LocationSearch';
 import Suggestions from './components/travel/Suggestions';
 import Header from './components/travel/Header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
+import { validateEnv } from './lib/env-handler';
 
 // Sample travel modes with more realistic times/speeds
 const TRAVEL_MODES: TravelMode[] = [
@@ -60,6 +61,16 @@ function App() {
   const [travelModes, setTravelModes] = useState<Record<string, string>>({});
   const [activeTab, setActiveTab] = useState('itinerary');
   const [isMapVisible, setIsMapVisible] = useState(true);
+  const [envError, setEnvError] = useState<string | null>(null);
+
+  // Validate environment variables
+  useEffect(() => {
+    const isValid = validateEnv();
+    if (!isValid) {
+      setEnvError('Missing required API keys. Please check your environment variables.');
+      toast.error('API key configuration error');
+    }
+  }, []);
 
   // Load saved itinerary on mount
   useEffect(() => {
@@ -169,6 +180,12 @@ function App() {
         onToggleMapView={() => setIsMapVisible(!isMapVisible)}
         isMapVisible={isMapVisible}
       />
+      
+      {envError && (
+        <div className="bg-destructive text-destructive-foreground p-2 text-center">
+          {envError}
+        </div>
+      )}
       
       <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
         {/* Map section - hidden on mobile when isMapVisible is false */}

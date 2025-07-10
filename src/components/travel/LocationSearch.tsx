@@ -18,15 +18,15 @@ const LocationSearch = ({ onAddLocation }: LocationSearchProps) => {
   
   // Initialize Google Maps API on component mount
   useEffect(() => {
-    // Check if Google Maps API is already loaded (from index.html)
+    // Check if Google Maps API is already loaded
     if (window.google?.maps) {
       return; // API already loaded
     }
 
-    // As a fallback, try to load it dynamically
+    // Load the Google Maps API using our utility function
     loadGoogleMapsScript().catch(err => {
       console.error("Failed to load Google Maps API:", err);
-      setError("Failed to initialize search functionality. Please try again later.");
+      setError("Failed to initialize search. Please check your API key and try again later.");
     });
   }, []);
 
