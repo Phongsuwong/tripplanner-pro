@@ -11,7 +11,7 @@
         "optimize": "vite optimize",
         "preview": "vite preview",
         "predeploy": "npm run build",
-        "deploy": "gh-pages -d dist -b gh-pages"
+        "deploy": "gh-pages -d dist"
     },
     "dependencies": {
         "@dnd-kit/core": "^6.3.1",
