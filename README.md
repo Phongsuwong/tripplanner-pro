@@ -18,6 +18,7 @@ This application is deployed on GitHub Pages at: https://phongsuwong.github.io/t
 
 ### How to Deploy
 
+#### Manual Deployment
 1. Clone the repository
 2. Install dependencies:
    ```
@@ -32,6 +33,23 @@ This will:
 - Build the production version of the app
 - Deploy it to the gh-pages branch of your repository
 - Make it available at https://phongsuwong.github.io/tripplanner-pro/
+
+#### Automatic Deployment via GitHub Actions
+This repository is set up with a GitHub Actions workflow that automatically deploys the app when changes are pushed to the main branch:
+
+1. Push your changes to the main branch:
+   ```
+   git add .
+   git commit -m "Your commit message"
+   git push origin main
+   ```
+
+2. The GitHub Actions workflow will automatically:
+   - Build the app
+   - Deploy it to the gh-pages branch
+   - Make it available at https://phongsuwong.github.io/tripplanner-pro/
+
+3. Check the Actions tab in your GitHub repository to monitor the deployment status.
 
 ### Development
 

@@ -27,9 +27,8 @@ jobs:
       - name: Build
         run: npm run build
         
-      - name: Copy CNAME and .nojekyll
+      - name: Copy .nojekyll
         run: |
-          cp public/CNAME dist/
           cp public/.nojekyll dist/
 
       - name: Deploy to GitHub Pages
